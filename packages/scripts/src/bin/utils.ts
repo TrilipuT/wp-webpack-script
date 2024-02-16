@@ -112,7 +112,7 @@ export function printCompileTimeMessage(stat: any, lastStat: any | null) {
 	}
 }
 
-export const webpackStatToJsonOptions: webpack.Stats.ToJsonOptions = {
+export const webpackStatToJsonOptions: webpack.StatsOptions = {
 	timings: true,
 	assets: false,
 	builtAt: true,

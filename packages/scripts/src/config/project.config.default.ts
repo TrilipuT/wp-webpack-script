@@ -94,7 +94,7 @@ export interface ProjectConfig {
 	// Completely overrides `babel-loader` options for typescript files
 	tsBabelOverride?: webpackLoaderOptionsOverride;
 	externals?: webpack.Configuration['externals'];
-	alias?: webpack.Resolve['alias'];
+	alias?: webpack.ResolveOptions['alias'];
 	errorOverlay?: boolean;
 	optimizeSplitChunks: boolean;
 	watch?: string | string[];

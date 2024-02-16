@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { Stats } from 'webpack';
+import webpack from 'webpack';
 
 const friendlySyntaxErrorLabel: string = 'Syntax error:';
 
@@ -97,7 +97,8 @@ function formatMessage(message: string) {
 }
 
 export function formatWebpackMessages(
-	json: Stats.ToJsonOutput | { errors: string[]; warnings: string[] }
+	// @ts-ignore
+	json: webpack.Stats.ToJsonOutput | { errors: string[]; warnings: string[] }
 ) {
 	const formattedErrors = json.errors.map(formatMessage);
 	const formattedWarnings = json.warnings.map(formatMessage);

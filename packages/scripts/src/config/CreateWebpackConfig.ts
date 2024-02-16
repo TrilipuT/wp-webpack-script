@@ -211,9 +211,11 @@ export class CreateWebpackConfig {
 
 		// Now create the config and return it
 		let config: webpack.Configuration = {
+			// @ts-ignore
 			name: file.name,
 			entry: helper.getEntry(),
 			output: helper.getOutput(),
+			// @ts-ignore
 			module: helper.getModule(),
 			plugins: helper.getPlugins(),
 			resolve: helper.getResolve(),

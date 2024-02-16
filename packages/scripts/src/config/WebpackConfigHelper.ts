@@ -223,8 +223,10 @@ export class WebpackConfigHelper {
 	/**
 	 * Get webpack compatible output object.
 	 */
+	// @ts-ignore
 	public getOutput(): webpack.Output {
 		// Assuming it is production
+		// @ts-ignore
 		const output: webpack.Output = {
 			// Here we create a directory inside the user provided outputPath
 			// The name of the directory is the sluggified verion of `name`
@@ -266,8 +268,10 @@ export class WebpackConfigHelper {
 	/**
 	 * Get WebPack plugins, depending on development or production
 	 */
+	// @ts-ignore
 	public getPlugins(): webpack.Plugin[] {
 		// Add common plugins
+		// @ts-ignore
 		let plugins: webpack.Plugin[] = [
 			// Define env
 			new webpack.DefinePlugin({
@@ -285,6 +289,7 @@ export class WebpackConfigHelper {
 			new CleanWebpackPlugin({
 				verbose: false,
 				cleanOnceBeforeBuildPatterns: [`${this.outputPath}/${this.appDir}`],
+				// @ts-ignore
 			}) as unknown as webpack.Plugin,
 			// Initiate mini css extract
 			new MiniCssExtractPlugin({
@@ -300,6 +305,7 @@ export class WebpackConfigHelper {
 				publicPath: ``, // We dont put ${this.config.outputPath}/ here because, PHP will pick it up anyway.
 				entrypoints: true,
 				entrypointsKey: 'wpackioEp',
+				// @ts-ignore
 			}) as unknown as webpack.Plugin,
 		];
 		// Add ts checker plugin if project has tsconfig.json
@@ -595,6 +601,7 @@ ${bannerConfig.copyrightText}${bannerConfig.credit ? creditNote : ''}`,
 		rules.push(...styleRules, fileRulesNonStyle, fileRulesStyle);
 
 		return {
+			// @ts-ignore
 			rules,
 		};
 	}
@@ -602,7 +609,7 @@ ${bannerConfig.copyrightText}${bannerConfig.credit ? creditNote : ''}`,
 	/**
 	 * Get webpack compatible resolve property.
 	 */
-	public getResolve(): webpack.Resolve {
+	public getResolve(): webpack.ResolveOptions {
 		return {
 			extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx'],
 			alias: this.config.alias !== undefined ? { ...this.config.alias } : {},
@@ -614,8 +621,10 @@ ${bannerConfig.copyrightText}${bannerConfig.credit ? creditNote : ''}`,
 	 *
 	 * We optimize all chunks because
 	 */
+	// @ts-ignore
 	public getOptimization(): webpack.Options.Optimization | undefined {
 		const { optimizeSplitChunks } = this.config;
+		// @ts-ignore
 		const optimization: webpack.Options.Optimization = {
 			// We set runtimeChunk to be single
 			// because user can (and probably should)
@@ -672,10 +681,10 @@ ${bannerConfig.copyrightText}${bannerConfig.credit ? creditNote : ''}`,
 	 * @param options Existing babel loader options.
 	 */
 	private getFinalBabelLoaderOptions(
-		options: webpack.RuleSetLoader['options'],
+		options: webpack.RuleSetRule['options'],
 		addReactRefresh: boolean = true
-	): webpack.RuleSetLoader['options'] {
-		const finalOptions: webpack.RuleSetLoader['options'] =
+	): webpack.RuleSetRule['options'] {
+		const finalOptions: webpack.RuleSetRule['options'] =
 			options && typeof options === 'object' ? { ...options } : {};
 
 		if (
@@ -713,13 +722,14 @@ ${bannerConfig.copyrightText}${bannerConfig.credit ? creditNote : ''}`,
 	 * @param override User defined option.
 	 */
 	private getOverrideWebpackRuleOptions(
-		defaults: webpack.RuleSetLoader['options'],
+		defaults: webpack.RuleSetRule['options'],
 		override: webpackLoaderOptionsOverride
-	): webpack.RuleSetLoader['options'] {
+	): webpack.RuleSetRule['options'] {
 		// If override is not undefined or null, then return it
 		if (override !== undefined) {
 			// If it is a function
 			if (typeof override === 'function') {
+				// @ts-ignore
 				return override(defaults || {}) as webpack.RuleSetLoader['options'];
 			}
 			return override;

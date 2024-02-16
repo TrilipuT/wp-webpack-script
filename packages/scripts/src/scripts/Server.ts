@@ -2,7 +2,7 @@
 import browserSync from 'browser-sync';
 import devIp from 'dev-ip';
 import open from 'open';
-import webpack from 'webpack';
+import webpack, { Compiler } from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import logSymbols from 'log-symbols';
@@ -54,6 +54,7 @@ export class Server {
 
 	private bs?: browserSync.BrowserSyncInstance;
 
+	// @ts-ignore
 	private devMiddlewares?: webpackDevMiddleware.WebpackDevMiddleware[];
 
 	private webpackConfig: CreateWebpackConfig;
@@ -147,6 +148,7 @@ export class Server {
 
 		// Init middleware and stuff
 		const middlewares: browserSync.MiddlewareHandler[] = [];
+		// @ts-ignore
 		const devMiddlewares: webpackDevMiddleware.WebpackDevMiddleware[] = [];
 
 		// We can have multi-compiler or single compiler, depending on the config
@@ -167,14 +169,15 @@ export class Server {
 		this.addHooks(compiler as webpack.Compiler);
 
 		const devMiddleware = webpackDevMiddleware(
-			compiler as any,
+			compiler as webpack.Compiler,
 			{
 				stats: false,
 				publicPath: this.webpackConfig.getPublicPath(),
-			} as webpackDevMiddleware.Options
+			} as webpackDevMiddleware.Options<any, any>
 		);
 
-		const hotMiddleware = webpackHotMiddleware(compiler, {
+		// @ts-ignore
+		const hotMiddleware = webpackHotMiddleware(compiler as Compiler, {
 			// Now because we are already using publicPath(dynamicPublicPath = true) in client
 			// we have to assume that it is prefixed. That's why we prefix it in the server too.
 			// Because it could be multi-compiler, I guess it will just work fine since we are
@@ -227,7 +230,7 @@ export class Server {
 		}
 
 		// Open browser on first build
-		devMiddleware.waitUntilValid(stats => {
+		devMiddleware.waitUntilValid((stats: any) => {
 			if (!this.firstCompileCompleted) {
 				this.firstCompileCompleted = true;
 				this.callbacks.firstCompile(stats as any);

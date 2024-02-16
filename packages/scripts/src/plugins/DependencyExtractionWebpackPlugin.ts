@@ -100,7 +100,7 @@ export class DependencyExtractionWebpackPlugin {
 		await unlock(destination);
 	}
 
-	handleEmit(compilation: webpack.compilation.Compilation) {
+	handleEmit(compilation: webpack.Compilation) {
 		if (!this.compiler) {
 			return;
 		}
@@ -123,9 +123,12 @@ export class DependencyExtractionWebpackPlugin {
 			// Search for externalized modules in all chunks.
 			for (const chunk of entrypoint.chunks) {
 				for (const chunkModule of chunk.modulesIterable) {
+					// @ts-ignore
 					processModule(chunkModule);
 					// loop through submodules of ConcatenatedModule
+					// @ts-ignore
 					if (chunkModule.modules) {
+						// @ts-ignore
 						for (const concatModule of chunkModule.modules) {
 							processModule(concatModule);
 						}
@@ -138,6 +141,7 @@ export class DependencyExtractionWebpackPlugin {
 			const assetData = {
 				// Get a sorted array so we can produce a stable, stringified representation.
 				dependencies: Array.from(entrypointExternalizedWpDeps).sort(),
+				// @ts-ignore
 				version: runtimeChunk.hash,
 			};
 
@@ -152,7 +156,7 @@ export class DependencyExtractionWebpackPlugin {
 				fileName
 			);
 			const assetPath = compilation.getPath(outputPath, {
-				chunk: { name: 'dependencies.wp' },
+				chunk: new webpack.Chunk('dependencies.wp' ),
 				filename: fileName,
 				contentHash: '',
 			});

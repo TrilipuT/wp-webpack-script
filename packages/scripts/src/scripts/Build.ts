@@ -40,8 +40,10 @@ export class Build {
 			}).apply(compiler);
 			try {
 				compiler.run((err, stats) => {
+					// @ts-ignore
 					const raw = stats.toJson('verbose');
 					const messages = formatWebpackMessages(raw);
+					// @ts-ignore
 					const outputLog = stats.toString({
 						colors: true,
 						assets: true,

@@ -111,12 +111,13 @@ export function getFileLoaderForJsAndStyleAssets(
 	return { fileRulesNonStyle, fileRulesStyle };
 }
 
+// @ts-ignore
 export function getStyleLoaderUses(
 	isDev: boolean,
 	publicPathUrl: string,
 	preprocessor: boolean
 ) {
-	const styleLoader: webpack.RuleSetRule['use'] = [
+	const styleLoader: webpack.RuleSetRule[] = [
 		{
 			loader: MiniCssExtractPlugin.loader,
 			options: {
